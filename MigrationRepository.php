@@ -11,7 +11,9 @@ namespace WPMigrations;
 
 class MigrationRepository implements MigrationRepositoryInterface
 {
-    const OPTION_NAME = "wp-migrations-applied";
+    const OPTION_NAME = "wp-migrations-ran";
+
+    private $migrations_ran;
 
     /**
      * Create the migration repository data store.
@@ -20,7 +22,17 @@ class MigrationRepository implements MigrationRepositoryInterface
      */
     public static function createRepository()
     {
-        add_option(self::OPTION_NAME, serialize([]));
+        \add_option(self::OPTION_NAME, serialize([]));
+    }
+
+    public function getRanObjects()
+    {
+        if (is_null($this->migrations_ran)) {
+            $option_value         = get_option(self::OPTION_NAME);
+            $this->migrations_ran = unserialize($option_value);
+        }
+
+        return $this->migrations_ran;
     }
 
     /**
@@ -30,8 +42,14 @@ class MigrationRepository implements MigrationRepositoryInterface
      */
     public function getRan()
     {
-        $migrations_ran = get_option(self::OPTION_NAME);
-        return unserialize($migrations_ran);
+        $migrations = $this->getRanObjects();
+
+        $files = [];
+        foreach ($migrations as $migration) {
+            array_push($files, $migration->file);
+        }
+
+        return $files;
     }
 
     /**
@@ -53,7 +71,12 @@ class MigrationRepository implements MigrationRepositoryInterface
      */
     public function log($file, $batch)
     {
-        // TODO: Implement log() method.
+        $migrations_ran = $this->getRanObjects();
+        array_push($migrations_ran, (object)[
+            'file'  => $file,
+            'batch' => $batch
+        ]);
+        \update_option(self::OPTION_NAME, serialize($migrations_ran));
     }
 
     /**
@@ -63,6 +86,13 @@ class MigrationRepository implements MigrationRepositoryInterface
      */
     public function getNextBatchNumber()
     {
-        // TODO: Implement getNextBatchNumber() method.
+        $migrations_ran = $this->getRanObjects();
+        if (count($migrations_ran) == 0) {
+            return 1;
+        } else {
+            $migration = last($migrations_ran);
+
+            return $migration->batch + 1;
+        }
     }
 }
