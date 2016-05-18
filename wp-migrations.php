@@ -18,21 +18,26 @@ class Plugin
 
     static function init()
     {
-        register_activation_hook( __FILE__, array( Install::class, 'run' ) );
+        register_activation_hook(__FILE__, array(static::class, 'plugin_activated'));
 
-        add_action( 'admin_init', array( static::class, 'run_migrations' ), 100);
+        add_action('admin_init', array(static::class, 'run_migrations'), 100);
+    }
+
+    static function plugin_activated()
+    {
+        MigrationRepository::createRepository();
     }
 
     static function run_migrations()
     {
-        $directory = apply_filters( 'wpmigrations_directory', null);
+        $directory = apply_filters('wpmigrations_directory', null);
 
-        if(is_null($directory)){
+        if (is_null($directory)) {
             return;
         }
 
-        $migrationHandler = new MigrationHandler();
-        $migrationHandler->findMigrations($directory);
+        $migrationHandler = new Migrator(new MigrationRepository());
+        $migrationHandler->run($directory);
     }
 
 }
