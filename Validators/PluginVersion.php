@@ -11,6 +11,13 @@ class PluginVersion implements ValidatorInterface
     {
         $version = Helper::plugin_version($value);
 
+        // if the plugin isn't installed there is no version te be checked
+        // this validator only checks the version, it doesn't check the existence of the plugin
+        // so therefore it return true if the plugin isn't present
+        if($version == false){
+            return true;
+        }
+
         return Semver::satisfies($version,$value);
     }
 
