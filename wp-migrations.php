@@ -11,6 +11,7 @@ Text Domain: wp_migrations
 namespace WP_Migrations;
 
 include('Libraries/Autoloader.php');
+include('vendor/autoload.php');
 
 class Plugin
 {

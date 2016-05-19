@@ -29,4 +29,14 @@ class Helper
         return is_array(static::get_plugin_data_by_name($plugin_name));
     }
 
+    public static function plugin_version($plugin_name)
+    {
+        $data = static::get_plugin_data_by_name($plugin_name);
+        if (is_array($data)) {
+            return $data['Version'];
+        } else {
+            return false;
+        }
+
+    }
 }
