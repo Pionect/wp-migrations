@@ -23,7 +23,7 @@ class MigrationRepository implements MigrationRepositoryInterface
     {
         if (is_null($this->migrations_ran)) {
             $option_value         = get_option(self::OPTION_NAME);
-            $this->migrations_ran = [];$option_value;
+            $this->migrations_ran = $option_value;
         }
 
         return $this->migrations_ran;
