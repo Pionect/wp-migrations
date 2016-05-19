@@ -16,14 +16,14 @@ class MigrationRepository implements MigrationRepositoryInterface
      */
     public static function createRepository()
     {
-        \add_option(self::OPTION_NAME, serialize([]));
+        \add_option(self::OPTION_NAME, []);
     }
 
     public function getRanObjects()
     {
         if (is_null($this->migrations_ran)) {
             $option_value         = get_option(self::OPTION_NAME);
-            $this->migrations_ran = unserialize($option_value);
+            $this->migrations_ran = [];$option_value;
         }
 
         return $this->migrations_ran;
@@ -70,7 +70,7 @@ class MigrationRepository implements MigrationRepositoryInterface
             'file'  => $file,
             'batch' => $batch
         ]);
-        \update_option(self::OPTION_NAME, serialize($migrations_ran));
+        \update_option(self::OPTION_NAME, $migrations_ran);
     }
 
     /**
