@@ -1,6 +1,6 @@
 <?php
 
-namespace WPMigrations;
+namespace WP_Migrations;
 
 interface MigrationRepositoryInterface
 {

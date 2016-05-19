@@ -1,6 +1,6 @@
 <?php
 
-namespace WPMigrations\Libraries;
+namespace WP_Migrations\Libraries;
 
 class Helper
 {

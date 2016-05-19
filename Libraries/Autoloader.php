@@ -14,7 +14,7 @@
 
 spl_autoload_register(function ($class) {
 
-    $prefix = 'WPMigrations\\';
+    $prefix = 'WP_Migrations\\';
 
     $base_dir = __DIR__ . '/../';
 

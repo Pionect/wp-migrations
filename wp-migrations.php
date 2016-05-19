@@ -8,7 +8,7 @@ Author URI: http://www.pionect.nl
 Text Domain: wp_migrations
 */
 
-namespace WPMigrations;
+namespace WP_Migrations;
 
 include('Libraries/Autoloader.php');
 

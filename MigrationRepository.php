@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: tomas
- * Date: 18-5-16
- * Time: 23:58
- */
 
-namespace WPMigrations;
+namespace WP_Migrations;
 
 
 class MigrationRepository implements MigrationRepositoryInterface
@@ -90,7 +84,7 @@ class MigrationRepository implements MigrationRepositoryInterface
         if (count($migrations_ran) == 0) {
             return 1;
         } else {
-            $migration = last($migrations_ran);
+            $migration = end($migrations_ran);
 
             return $migration->batch + 1;
         }

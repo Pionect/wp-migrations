@@ -1,6 +1,6 @@
 <?php
 
-namespace WPMigrations;
+namespace WP_Migrations;
 
 
 class Migrator
@@ -156,7 +156,7 @@ class Migrator
     {
         $file = implode('_', array_slice(explode('_', $file), 4));
 
-        $class = \WPMigrations\Libraries\Helper::studly($file);
+        $class = \WP_Migrations\Libraries\Helper::studly($file);
 
         return new $class;
     }
