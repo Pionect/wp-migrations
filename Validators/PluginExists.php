@@ -4,7 +4,7 @@ namespace WP_Migrations\Validators;
 
 use WP_Migrations\Libraries\Helper;
 
-class PluginExists
+class PluginExists implements ValidatorInterface
 {
     public static function validate($value){
         

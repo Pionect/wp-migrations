@@ -37,7 +37,10 @@ class Plugin
             return;
         }
 
-        $migrationHandler = new Migrator(new MigrationRepository());
+        $migrationHandler = new Migrator(
+            new MigrationRepository(),
+            new MigrationValidator()
+        );
         $migrationHandler->run($directory);
     }
 

@@ -13,6 +13,11 @@ class Migrator
     protected $repository;
 
     /**
+     * The migration validator implementation.
+     */
+    protected $validator;
+
+    /**
      * The notes for the current operation.
      *
      * @var array
@@ -24,9 +29,10 @@ class Migrator
      *
      * @param  \WP_Migrations\MigrationRepository  $repository
      */
-    public function __construct(MigrationRepository $repository)
+    public function __construct(MigrationRepository $repository,MigrationValidator $validator)
     {
         $this->repository = $repository;
+        $this->validator = $validator;
     }
 
     /**
@@ -88,6 +94,16 @@ class Migrator
         // command such as "up" or "down", or we can just simulate the action.
         $migration = $this->resolve($file);
 
+        if(method_exists($migration, 'get_validation_rules')) {
+            $result = $this->validator->validate($migration);
+
+            if ($result == false) {
+                $this->note("<info>Validation failed:</info> $file");
+
+                return;
+            }
+        }
+
         if(is_subclass_of($migration,MigrationTypes\OptionMigration::class)) {
             $migration->run();
         } else {
@@ -101,7 +117,7 @@ class Migrator
 
         $this->note("<info>Migrated:</info> $file");
     }
-
+    
     /**
      * Get all of the migration files in a given path.
      *
