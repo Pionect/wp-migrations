@@ -2,6 +2,7 @@
 
 namespace WP_Migrations;
 
+use WP_Migrations\Libraries\Helper;
 
 class Migrator
 {
@@ -21,8 +22,7 @@ class Migrator
     /**
      * Create a new migrator instance.
      *
-     * @param  \WPMigrations\MigrationRepository  $repository
-     * @return void
+     * @param  \WP_Migrations\MigrationRepository  $repository
      */
     public function __construct(MigrationRepository $repository)
     {
@@ -55,10 +55,9 @@ class Migrator
      * Run an array of migrations.
      *
      * @param  array  $migrations
-     * @param  bool   $pretend
      * @return void
      */
-    public function runMigrationList($migrations, $pretend = false)
+    public function runMigrationList($migrations)
     {
         // First we will just make sure that there are any migrations to run. 
         if (count($migrations) == 0) {
@@ -71,7 +70,7 @@ class Migrator
         // migrations "up" so the changes are made to the databases. We'll then log
         // that the migration was run so we don't repeat it next time we execute.
         foreach ($migrations as $file) {
-            $this->runUp($file, $batch, $pretend);
+            $this->runUp($file, $batch);
         }
     }
 
@@ -80,7 +79,6 @@ class Migrator
      *
      * @param  string  $file
      * @param  int     $batch
-     * @param  bool    $pretend
      * @return void
      */
     protected function runUp($file, $batch)
@@ -156,7 +154,7 @@ class Migrator
     {
         $file = implode('_', array_slice(explode('_', $file), 4));
 
-        $class = \WP_Migrations\Libraries\Helper::studly($file);
+        $class = Helper::studly($file);
 
         return new $class;
     }
