@@ -88,9 +88,11 @@ class Migrator
         // command such as "up" or "down", or we can just simulate the action.
         $migration = $this->resolve($file);
 
-        $option_value = 'fake';
-
-        $migration->up($option_value);
+        if(is_subclass_of($migration,MigrationTypes\OptionMigration::class)) {
+            $migration->run();
+        } else {
+            $migration->up();
+        }
 
         // Once we have run a migrations class, we will log that it was run in this
         // repository so that we don't try to run it next time we do a migration
