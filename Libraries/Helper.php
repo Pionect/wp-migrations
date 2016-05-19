@@ -10,4 +10,23 @@ class Helper
 
         return str_replace(' ', '', $value);
     }
+
+    public static function get_plugin_data_by_name($plugin_name)
+    {
+        $plugins = get_plugins();
+
+        foreach ($plugins as $file => $data) {
+            if (strpos($file, $plugin_name . '/') >= 0) {
+                return $data;
+            }
+        }
+
+        return false;
+    }
+
+    public static function is_plugin_installed($plugin_name)
+    {
+        return is_array(static::get_plugin_data_by_name($plugin_name));
+    }
+
 }
