@@ -25,14 +25,23 @@ class Migrator
     protected $notes = [];
 
     /**
+     * Store the namespace in which the migrations are stored
+     * @var string
+     */
+    protected $migrations_namespace;
+
+    /**
      * Create a new migrator instance.
      *
      * @param  \WP_Migrations\MigrationRepository  $repository
      */
-    public function __construct(MigrationRepository $repository,MigrationValidator $validator)
+    public function __construct(MigrationRepository $repository,
+                                MigrationValidator $validator,
+                                $migrations_namespace)
     {
         $this->repository = $repository;
         $this->validator = $validator;
+        $this->migrations_namespace = $migrations_namespace;
     }
 
     /**
@@ -172,7 +181,7 @@ class Migrator
     {
         $file = implode('_', array_slice(explode('_', $file), 4));
 
-        $class = Helper::studly($file);
+        $class = $this->migrations_namespace.'\\'. Helper::studly($file);
 
         return new $class;
     }

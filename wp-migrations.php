@@ -32,6 +32,7 @@ class Plugin
     static function run_migrations()
     {
         $directory = apply_filters('wpmigrations_directory', null);
+        $namespace = apply_filters('wpmigrations_namespace', 'Migrations');
 
         if (is_null($directory)) {
             return;
@@ -39,7 +40,8 @@ class Plugin
 
         $migrationHandler = new Migrator(
             new MigrationRepository(),
-            new MigrationValidator()
+            new MigrationValidator(),
+            $namespace
         );
         $migrationHandler->run($directory);
     }
