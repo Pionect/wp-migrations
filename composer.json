@@ -1,5 +1,14 @@
 {
+    "name": "pionect/wp-migrations",
+    "description": "A plugin designed to enable migrations inspired by the migrations from Laravel",
+    "type": "wordpress-plugin",
     "require": {
         "composer/semver": "^1.4"
-    }
+    },
+    "authors": [
+        {
+            "name": "Tomas van Rijsse",
+            "email": "tomas@pionect.nl"
+        }
+    ]
 }
