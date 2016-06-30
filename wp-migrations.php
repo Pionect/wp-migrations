@@ -27,6 +27,7 @@ class Plugin
     static function plugin_activated()
     {
         MigrationRepository::createRepository();
+        OptionVersionRepository::createRepository();
     }
 
     static function run_migrations()
