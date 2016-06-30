@@ -22,12 +22,21 @@ class Plugin
         register_activation_hook(__FILE__, array(static::class, 'plugin_activated'));
 
         add_action('admin_init', array(static::class, 'run_migrations'), 100);
+        static::initialize_option_versions_provider();
     }
 
     static function plugin_activated()
     {
         MigrationRepository::createRepository();
         OptionVersionRepository::createRepository();
+    }
+
+    static function initialize_option_versions_provider()
+    {
+        $optionVersionsProvider = new OptionVersionProvider(
+            new OptionVersionRepository()
+        );
+        $optionVersionsProvider->init();
     }
 
     static function run_migrations()
