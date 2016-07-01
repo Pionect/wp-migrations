@@ -61,4 +61,14 @@ class Repository
             ['%s', '%s', '%d']
         );
     }
+
+    public function getOptionChanges(){
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . self::TABLE_NAME;
+
+        $query = "SELECT * FROM $table_name";
+
+        return $wpdb->get_results($query);
+    }
 }

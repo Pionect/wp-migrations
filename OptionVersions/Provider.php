@@ -36,7 +36,14 @@ class Provider
     }
 
     public function toolsPage(){
-        
+        if( ! class_exists( 'WP_List_Table' ) ) {
+            require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+        }
+
+        $listTable = new ListTable();
+        $listTable->prepare_items();
+
+        include('assets/toolspage.php');
     }
 
 }
