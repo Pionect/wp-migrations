@@ -23,21 +23,23 @@ class Plugin
 
         add_action('admin_init', array(static::class, 'run_migrations'), 100);
         add_action('admin_menu', array(static::class, 'optionversions_menu'));
-        static::initialize_option_versions_provider();
+
+        $optionVersionsProvider = new OptionVersions\Provider(
+            new OptionVersions\Repository()
+        );
+        $optionVersionsProvider->init();
+
+        $pluginOptionsProvider = new PluginOptions\Provider(
+            new PluginOptions\Repository()
+        );
+        $pluginOptionsProvider->init();
     }
 
     static function plugin_activated()
     {
         Migrations\Repository::createRepository();
         OptionVersions\Repository::createRepository();
-    }
-
-    static function initialize_option_versions_provider()
-    {
-        $optionVersionsProvider = new OptionVersions\Provider(
-            new OptionVersions\Repository()
-        );
-        $optionVersionsProvider->init();
+        PluginOptions\Repository::createRepository();
     }
 
     static function optionversions_menu(){
