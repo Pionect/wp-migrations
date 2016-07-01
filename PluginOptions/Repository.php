@@ -39,13 +39,21 @@ class Repository
      * @param  string $owner
      * @return void
      */
-    public function save($option_name,$object)
+    public function cache($option_name,$object)
     {
         $pluginOptions = $this->getPluginOptions();
         if(!array_key_exists($option_name,$pluginOptions)) {
-            $pluginOptions[$option_name] = $object;
-            update_option(self::OPTION_NAME, $pluginOptions);
+            $this->pluginOptions[$option_name] = $object;
         }
+    }
+
+    public function save(){
+        update_option(self::OPTION_NAME, $this->pluginOptions);
+    }
+
+    public function isRegistered($option_name){
+        $pluginOptions = $this->getPluginOptions();
+        return array_key_exists($option_name,$pluginOptions);
     }
 
 }

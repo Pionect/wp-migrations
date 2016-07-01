@@ -11,36 +11,47 @@ class Provider
     public function __construct(Repository $pluginOptionsRepository)
     {
         $this->repository = $pluginOptionsRepository;
+        //pull option value before we register the filter.
+        $this->repository->getPluginOptions();
     }
 
     public function init()
     {
-        add_action('add_option', [$this, 'add_option']);
+        add_filter('all', [$this, 'pre_option_'],1,3);
+        add_action('shutdown',[$this,'save_plugin_options'],1,0);
     }
 
-    public function add_option($option)
+    public function pre_option_($actionHook,$bool=false,$option=null)
     {
+        if(strpos($actionHook,'pre_option_') === FALSE){
+            return $bool;
+        }
+
+        // dont register values starting with _
         if ($option[0] == '_') {
             return;
         }
+
+        //check if the option isn't allready registered
+        if($this->repository->isRegistered($option)){
+            return $bool;
+        }
+
         $files = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
-        $unit=array('b','kb','mb','gb','tb','pb');
-        $size = memory_get_usage();
-        echo round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
-
         $script = '';
-        if (count($files) >= 6 && array_key_exists('file',$files[5])) {
-            $script = $files[5]['file'];
+        if (count($files) >= 5 && array_key_exists('file',$files[4])) {
+            $script = $files[4]['file'];
         }
         foreach($files as $file){
-            if($file['function'] == 'add_site_option' && array_key_exists('file',$file)){
+            if($file['function'] == 'get_option' && array_key_exists('file',$file)){
                 $script = $file['file'];
             }
         }
 
-        if(strpos($script,'wp-admin/options.php')){
-            
+        if(strpos($script,'wp-includes')){
+            $type = 'wordpress';
+            $group = 'wp-includes';
         } elseif (strpos($script, 'wp-admin')) {
             $type = 'wordpress';
             $group = 'wp-admin';
@@ -57,12 +68,21 @@ class Provider
             $group = 'unknown';
         }
 
+        $files = null;
+
         $object = (object)[
             'script' => $script,
             'type' => $type,
             'group' => $group
         ];
 
-        $this->repository->save($option,$object);
+        $this->repository->cache($option,$object);
+
+        return $bool;
+    }
+
+    public function save_plugin_options(){
+        remove_filter( 'all', [$this, 'pre_option_'],1 );
+        $this->repository->save();
     }
 }
