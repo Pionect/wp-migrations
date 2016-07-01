@@ -8,7 +8,7 @@ class Provider
 {
     protected $repository;
 
-    public function __construct(\WP_Migrations\OptionVersions\Repository $optionVersionRepository)
+    public function __construct(Repository $optionVersionRepository)
     {
         $this->repository = $optionVersionRepository;
     }
@@ -69,7 +69,7 @@ class Provider
     }
 
     public static function toolsPage(){
-        
+        $pluginOptionsRepository = new \WP_Migrations\PluginOptions\Repository();
     }
 
 }

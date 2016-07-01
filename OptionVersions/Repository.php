@@ -23,14 +23,14 @@ class Repository
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE $table_name (
-          id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+          id BIGINT(20) NOT NULL AUTO_INCREMENT,
           option_name VARCHAR(191) NOT NULL,
           option_value LONGTEXT NOT NULL,
           user_id mediumint(9),
           type varchar(50) NOT NULL,
           script varchar(255) NOT NULL,
           created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
-          UNIQUE KEY id (id)
+          PRIMARY KEY (id)
         ) $charset_collate;";
         $charset_collate = $wpdb->get_charset_collate();
 
