@@ -27,9 +27,7 @@ class Repository
           option_name VARCHAR(191) NOT NULL,
           option_value LONGTEXT NOT NULL,
           user_id mediumint(9),
-          type varchar(50) NOT NULL,
-          script varchar(255) NOT NULL,
-          created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+          updated_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
           PRIMARY KEY (id)
         ) $charset_collate;";
         $charset_collate = $wpdb->get_charset_collate();
@@ -47,7 +45,7 @@ class Repository
      * @param  int    $user_id
      * @return void
      */
-    public static function log($option,$option_value,$type,$script,$user_id=null)
+    public function log($option,$option_value,$user_id=null)
     {
         global $wpdb;
 
@@ -55,20 +53,12 @@ class Repository
 
         $wpdb->insert(
             $table_name,
-            array(
-                'option_name' => $option,
+            [
+                'option_name'  => $option,
                 'option_value' => $option_value,
-                'type' => $type,
-                'script' => $script,
-                'user_id' => $user_id,
-            ),
-            array(
-                '%s',
-                '%s',
-                '%s',
-                '%s',
-                '%d'
-            )
+                'user_id'      => $user_id,
+            ],
+            ['%s', '%s', '%d']
         );
     }
 }
