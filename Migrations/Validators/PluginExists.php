@@ -1,6 +1,6 @@
 <?php
 
-namespace WP_Migrations\Validators;
+namespace WP_Migrations\Migrations\Validators;
 
 use WP_Migrations\Libraries\Helper;
 

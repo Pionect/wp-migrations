@@ -1,6 +1,6 @@
 <?php
 
-namespace WP_Migrations\MigrationTypes;
+namespace WP_Migrations\Migrations\Types;
 
 
 abstract class OptionMigration

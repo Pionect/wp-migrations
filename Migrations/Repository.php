@@ -1,9 +1,9 @@
 <?php
 
-namespace WP_Migrations;
+namespace WP_Migrations\Migrations;
 
 
-class MigrationRepository implements MigrationRepositoryInterface
+class Repository implements RepositoryInterface
 {
     const OPTION_NAME = "wp-migrations-ran";
 

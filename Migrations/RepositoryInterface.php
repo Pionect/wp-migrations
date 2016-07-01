@@ -1,8 +1,8 @@
 <?php
 
-namespace WP_Migrations;
+namespace WP_Migrations\Migrations;
 
-interface MigrationRepositoryInterface
+interface RepositoryInterface
 {
     /**
      * Get the ran migrations for a given package.

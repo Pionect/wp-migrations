@@ -1,8 +1,9 @@
 <?php
 
-namespace WP_Migrations;
+namespace WP_Migrations\Migrations;
 
 use WP_Migrations\Libraries\Helper;
+use WP_Migrations\Migrations\Types\OptionMigration;
 
 class Migrator
 {
@@ -33,10 +34,11 @@ class Migrator
     /**
      * Create a new migrator instance.
      *
-     * @param  \WP_Migrations\MigrationRepository  $repository
+     * @param  \WP_Migrations\Migrations\Repository  $repository
+     * @param  \WP_Migrations\Migrations\Validator   $validator
      */
-    public function __construct(MigrationRepository $repository,
-                                MigrationValidator $validator,
+    public function __construct(Repository $repository,
+                                Validator $validator,
                                 $migrations_namespace)
     {
         $this->repository = $repository;
@@ -113,7 +115,7 @@ class Migrator
             }
         }
 
-        if(is_subclass_of($migration,MigrationTypes\OptionMigration::class)) {
+        if(is_subclass_of($migration,OptionMigration::class)) {
             $migration->run();
         } else {
             $migration->up();

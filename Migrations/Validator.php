@@ -1,11 +1,11 @@
 <?php
 
-namespace WP_Migrations;
+namespace WP_Migrations\Migrations;
 
 
 use WP_Migrations\Libraries\Helper;
 
-class MigrationValidator
+class Validator
 {
     public function validate($migration)
     {
@@ -46,7 +46,7 @@ class MigrationValidator
         if (!$validator) {
             throw new ValidatorMissingException($rule);
         }
-        if ($validator instanceof \WP_Migrations\Validators\ValidatorInterface == false) {
+        if ($validator instanceof \WP_Migrations\Migrations\Validators\ValidatorInterface == false) {
             throw new ValidatorWithoutInterfaceException($rule);
         }
 

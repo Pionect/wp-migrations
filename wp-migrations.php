@@ -27,7 +27,7 @@ class Plugin
 
     static function plugin_activated()
     {
-        MigrationRepository::createRepository();
+        Migrations\Repository::createRepository();
         OptionVersionRepository::createRepository();
     }
 
@@ -48,9 +48,9 @@ class Plugin
             return;
         }
 
-        $migrationHandler = new Migrator(
-            new MigrationRepository(),
-            new MigrationValidator(),
+        $migrationHandler = new Migrations\Migrator(
+            new Migrations\Repository(),
+            new Migrations\Validator(),
             $namespace
         );
         $migrationHandler->run($directory);
