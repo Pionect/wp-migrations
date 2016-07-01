@@ -24,6 +24,9 @@ class Provider
         if ($option[0] == '_') {
             return;
         }
+        if (strpos('wp-migrations', $option) !== false) {
+            return;
+        }
 
         $serialized_option = maybe_serialize( $new_value );
 
