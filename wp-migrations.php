@@ -22,6 +22,7 @@ class Plugin
         register_activation_hook(__FILE__, array(static::class, 'plugin_activated'));
 
         add_action('admin_init', array(static::class, 'run_migrations'), 100);
+        add_action('admin_menu', array(static::class, 'optionversions_menu'));
         static::initialize_option_versions_provider();
     }
 
@@ -37,6 +38,11 @@ class Plugin
             new OptionVersionRepository()
         );
         $optionVersionsProvider->init();
+    }
+
+    static function optionversions_menu(){
+        $title = __("Option Versions",'wp-migrations');
+        add_management_page( $title, $title, 'manage_options', 'optionversions', [OptionVersionProvider::class,'toolsPage'] );
     }
 
     static function run_migrations()

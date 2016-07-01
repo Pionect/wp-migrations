@@ -66,4 +66,8 @@ class OptionVersionProvider
         ];
     }
 
+    public static function toolsPage(){
+        
+    }
+
 }
