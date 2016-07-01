@@ -29,20 +29,20 @@ class Plugin
     static function plugin_activated()
     {
         Migrations\Repository::createRepository();
-        OptionVersionRepository::createRepository();
+        OptionVersions\Repository::createRepository();
     }
 
     static function initialize_option_versions_provider()
     {
-        $optionVersionsProvider = new OptionVersionProvider(
-            new OptionVersionRepository()
+        $optionVersionsProvider = new OptionVersions\Provider(
+            new OptionVersions\Repository()
         );
         $optionVersionsProvider->init();
     }
 
     static function optionversions_menu(){
         $title = __("Option Versions",'wp-migrations');
-        add_management_page( $title, $title, 'manage_options', 'optionversions', [OptionVersionProvider::class,'toolsPage'] );
+        add_management_page( $title, $title, 'manage_options', 'optionversions', [OptionVersions\Provider::class,'toolsPage'] );
     }
 
     static function run_migrations()

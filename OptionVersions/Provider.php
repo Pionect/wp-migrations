@@ -1,14 +1,14 @@
 <?php
 
 
-namespace WP_Migrations;
+namespace WP_Migrations\OptionVersions;
 
 
-class OptionVersionProvider
+class Provider
 {
     protected $repository;
 
-    public function __construct(OptionVersionRepository $optionVersionRepository)
+    public function __construct(\WP_Migrations\OptionVersions\Repository $optionVersionRepository)
     {
         $this->repository = $optionVersionRepository;
     }
@@ -48,7 +48,9 @@ class OptionVersionProvider
             }
         }
 
-        if (strpos($script, 'wp-admin')) {
+        if(strpos($script,'wp-admin/options.php')){
+            $type = 'option~'.$_REQUEST['option_page'];
+        } elseif (strpos($script, 'wp-admin')) {
             $type = 'wp-admin';
         } elseif (strpos($script, 'wp-content/plugins')) {
             $folders = explode(DIRECTORY_SEPARATOR,substr($script,strpos($script,'plugins/')));

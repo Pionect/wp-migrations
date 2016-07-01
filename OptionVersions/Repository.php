@@ -1,10 +1,10 @@
 <?php
 
 
-namespace WP_Migrations;
+namespace WP_Migrations\OptionVersions;
 
 
-class OptionVersionRepository
+class Repository
 {
     const TABLE_NAME = "optionversions";
 
