@@ -85,4 +85,23 @@ class ListTable extends WP_List_Table
         );
         return $sortable_columns;
     }
+
+    function extra_tablenav( $which ) {
+        $pluginOptionsRepository = new \WP_Migrations\PluginOptions\Repository();
+
+        $types = [];
+        foreach($pluginOptionsRepository->getPluginOptions() as $pluginOption){
+            $types[$pluginOption->type][] = $pluginOption->group;
+        }
+        foreach($types as $type => $groups){
+            sort($groups);
+            $types[$type] = array_unique($groups);
+        }
+
+        $order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
+
+        if ( $which == "top" ){
+            include 'assets/table_top.php';
+        }
+    }
 }
