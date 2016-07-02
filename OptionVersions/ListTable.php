@@ -26,14 +26,25 @@ class ListTable extends WP_List_Table
         $pluginOptionsRepository = new \WP_Migrations\PluginOptions\Repository();
         $optionVersionsRepository = new \WP_Migrations\OptionVersions\Repository();
 
+        $per_page = 20;
+        $current_page = $this->get_pagenum();
+        $total_items = $optionVersionsRepository->getCount();
+
+        $this->set_pagination_args( array(
+            'total_items' => $total_items,
+            'per_page'    => $per_page
+        ) );
+
         $columns = $this->get_columns();
         $hidden = array();
-        $sortable = array();
+        $sortable = $this->get_sortable_columns();
         $this->_column_headers = array($columns, $hidden, $sortable);
 
+        $order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
+        $optionChanges = $optionVersionsRepository->getOptionChanges(($current_page-1)*$per_page,$per_page,$order);
         $pluginOptions = $pluginOptionsRepository->getPluginOptions();
 
-        foreach($optionVersionsRepository->getOptionChanges() as $optionChange){
+        foreach($optionChanges as $optionChange){
             if(array_key_exists($optionChange->option_name,$pluginOptions)){
                 $pluginOption = $pluginOptions[$optionChange->option_name];
             } else {
@@ -48,6 +59,7 @@ class ListTable extends WP_List_Table
                 'group'      => $pluginOption->group,
                 'option'     => $optionChange->option_name,
                 'value'      => $optionChange->option_value,
+                'user_id'    => $optionChange->user_id,
                 'updated_at' => $optionChange->updated_at
             ];
         }
@@ -65,5 +77,12 @@ class ListTable extends WP_List_Table
             default:
                 return print_r( $item, true ) ; //Show the whole array for troubleshooting purposes
         }
+    }
+
+    function get_sortable_columns() {
+        $sortable_columns = array(
+            'updated_at'   => array('updated_at',true)
+        );
+        return $sortable_columns;
     }
 }

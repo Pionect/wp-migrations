@@ -62,13 +62,25 @@ class Repository
         );
     }
 
-    public function getOptionChanges(){
+    public function getOptionChanges($page,$per_page,$order='asc'){
         global $wpdb;
 
         $table_name = $wpdb->prefix . self::TABLE_NAME;
 
-        $query = "SELECT * FROM $table_name";
-
+        $query = <<<QUERY
+SELECT *
+FROM $table_name
+ORDER BY updated_at $order
+LIMIT $page,$per_page;
+QUERY;
         return $wpdb->get_results($query);
+    }
+
+    public function getCount(){
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . self::TABLE_NAME;
+
+        return $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
     }
 }
