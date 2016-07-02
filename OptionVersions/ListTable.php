@@ -40,9 +40,22 @@ class ListTable extends WP_List_Table
         $sortable = $this->get_sortable_columns();
         $this->_column_headers = array($columns, $hidden, $sortable);
 
-        $order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
-        $optionChanges = $optionVersionsRepository->getOptionChanges(($current_page-1)*$per_page,$per_page,$order);
         $pluginOptions = $pluginOptionsRepository->getPluginOptions();
+
+        $filter = ( ! empty($_REQUEST['group-filter'] ) ) ? $_REQUEST['group-filter'] : false;
+        $filter_options = [];
+        if($filter) {
+            foreach ($pluginOptions as $option_name => $pluginOption) {
+                if ($pluginOption->group == $filter) {
+                    $filter_options[] = $option_name;
+                }
+            }
+        }
+
+        $order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'desc';
+        $current_limit = ($current_page-1)*$per_page;
+
+        $optionChanges = $optionVersionsRepository->getOptionChanges($current_limit,$per_page,$order,$filter_options);
 
         foreach($optionChanges as $optionChange){
             if(array_key_exists($optionChange->option_name,$pluginOptions)){

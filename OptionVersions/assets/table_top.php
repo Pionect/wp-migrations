@@ -12,7 +12,7 @@
                     <optgroup label="<?php echo $type; ?>">
                         <?php foreach ($groups as $group):
                             $selected = '';
-                            if (array_key_exists('group-filter', $_REQUEST) && $_REQUEST['group-filter'] == $type) {
+                            if (array_key_exists('group-filter', $_REQUEST) && $_REQUEST['group-filter'] == $group) {
                                 $selected = ' selected = "selected"';
                             }
                             ?>

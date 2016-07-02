@@ -62,18 +62,34 @@ class Repository
         );
     }
 
-    public function getOptionChanges($page,$per_page,$order='asc'){
+    public function getOptionChanges($page,$per_page,$order='desc',$filter_options=[]){
         global $wpdb;
 
         $table_name = $wpdb->prefix . self::TABLE_NAME;
 
-        $query = <<<QUERY
-SELECT *
-FROM $table_name
-ORDER BY updated_at $order
-LIMIT $page,$per_page;
-QUERY;
-        return $wpdb->get_results($query);
+        if(!in_array(strtolower($order),['asc','desc'])){
+            $order = 'desc';
+        }
+
+        $args = [];
+
+        $query = "SELECT * FROM $table_name";
+        if(count($filter_options)) {
+            $options = "";
+            foreach($filter_options as $i => $option) {
+                if($i>0) $options .= ',';
+                $options .= '%s';
+                $args[] = $option;
+            }
+            $query .= " WHERE  option_name IN ($options)";
+        }
+        $query .= " ORDER BY updated_at $order LIMIT %d,%d;";
+
+        $args[] = $page;
+        $args[] = $per_page;
+
+        $save_query = $wpdb->prepare($query,$args);
+        return $wpdb->get_results($save_query );
     }
 
     public function getCount(){
