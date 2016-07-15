@@ -115,7 +115,7 @@ class ListTable extends WP_List_Table
             $types[$type] = array_unique($groups);
         }
 
-        $order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
+        $order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'desc';
 
         if ( $which == "top" ){
             include 'assets/table_top.php';
