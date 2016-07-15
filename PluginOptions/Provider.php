@@ -49,12 +49,9 @@ class Provider
             }
         }
 
-        if(strpos($script,'wp-includes')){
+        if(strpos($script,'wp-includes') || strpos($script, 'wp-admin')){
             $type = 'wordpress';
-            $group = 'wp-includes';
-        } elseif (strpos($script, 'wp-admin')) {
-            $type = 'wordpress';
-            $group = 'wp-admin';
+            $group = 'wordpress';
         } elseif (strpos($script, 'wp-content/plugins')) {
             $folders = explode(DIRECTORY_SEPARATOR,substr($script,strpos($script,'plugins/')));
             $type = 'plugin';
