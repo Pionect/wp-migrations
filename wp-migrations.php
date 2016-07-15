@@ -10,7 +10,7 @@ Text Domain: wp_migrations
 
 /**
  * TODO
- * 
+ *
  * - show real plugin names instead of folder names
  * - overwrite PluginOption in order of theme -> plugin -> wordpress core
  * - change repositories to singletons
@@ -21,6 +21,8 @@ Text Domain: wp_migrations
  **/
 
 namespace WP_Migrations;
+
+use Composer\Semver\Comparator;
 
 include('Libraries/Autoloader.php');
 include('vendor/autoload.php');
@@ -48,10 +50,16 @@ class Plugin
 
     static function plugin_activated()
     {
-        add_option('wp-migrations-version', self::VERSION );
-        Migrations\Repository::createRepository();
-        OptionVersions\Repository::createRepository();
-        PluginOptions\Repository::createRepository();
+        $current_version = get_option('wp-migrations-version') ?: '0.0.0';
+
+        if(Comparator::lessThan($current_version,'0.0.1')) {
+            // initial installation
+            Migrations\Repository::createRepository();
+            OptionVersions\Repository::createRepository();
+            PluginOptions\Repository::createRepository();
+        }
+
+        add_option('wp-migrations-version', self::VERSION);
     }
 
     static function run_migrations()
