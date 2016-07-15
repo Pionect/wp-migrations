@@ -8,6 +8,18 @@ Author URI: http://www.pionect.nl
 Text Domain: wp_migrations
 */
 
+/**
+ * TODO
+ * 
+ * - show real plugin names instead of folder names
+ * - overwrite PluginOption in order of theme -> plugin -> wordpress core
+ * - change repositories to singletons
+ * - change the ListTable option_value to a short summary
+ * - add ajax popup for the option_value
+ * - add page with a list of all the migrations ran
+ * - add a notice if the supplied migrations folder isn't correct
+ **/
+
 namespace WP_Migrations;
 
 include('Libraries/Autoloader.php');
@@ -36,6 +48,7 @@ class Plugin
 
     static function plugin_activated()
     {
+        add_option('wp-migrations-version', self::VERSION );
         Migrations\Repository::createRepository();
         OptionVersions\Repository::createRepository();
         PluginOptions\Repository::createRepository();
