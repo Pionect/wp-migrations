@@ -101,10 +101,14 @@ class ListTable extends WP_List_Table
 
     function extra_tablenav( $which ) {
         $pluginOptionsRepository = new \WP_Migrations\PluginOptions\Repository();
+        $optionVersionsRepository = new \WP_Migrations\OptionVersions\Repository();
 
         $types = [];
-        foreach($pluginOptionsRepository->getPluginOptions() as $pluginOption){
-            $types[$pluginOption->type][] = $pluginOption->group;
+        foreach($pluginOptionsRepository->getPluginOptions() as $option_name => $pluginOption){
+            $count = $optionVersionsRepository->getCount($option_name);
+            if($count) {
+                $types[$pluginOption->type][] = $pluginOption->group;
+            }
         }
         foreach($types as $type => $groups){
             sort($groups);

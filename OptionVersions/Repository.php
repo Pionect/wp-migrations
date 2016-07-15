@@ -92,11 +92,19 @@ class Repository
         return $wpdb->get_results($save_query );
     }
 
-    public function getCount(){
+    public function getCount($option_name = null){
         global $wpdb;
 
         $table_name = $wpdb->prefix . self::TABLE_NAME;
+        $query = "SELECT COUNT(*) FROM $table_name ";
 
-        return $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+        if(!is_null($option_name)){
+            $query .= "WHERE option_name = %s";
+            $query = $wpdb->prepare($query,$option_name);
+        }
+
+
+        return $wpdb->get_var( $query );
     }
+
 }
