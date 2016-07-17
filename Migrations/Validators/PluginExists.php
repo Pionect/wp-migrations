@@ -7,7 +7,9 @@ use WP_Migrations\Libraries\Helper;
 class PluginExists implements ValidatorInterface
 {
     public static function validate($value){
-        
-        return Helper::is_plugin_installed($value);
+
+        $plugin_name = $value;
+        return is_array(Helper::get_plugin_data_by_name($plugin_name));
+
     }
 }
