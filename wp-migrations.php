@@ -12,7 +12,6 @@ Text Domain: wp_migrations
  * TODO
  *
  * - show real plugin names instead of folder names
- * - overwrite PluginOption in order of theme -> plugin -> wordpress core
  * - change repositories to singletons
  * - change the ListTable option_value to a short summary
  * - add ajax popup for the option_value
