@@ -25,7 +25,7 @@ class DisableSearchEngines extends \WP_Migrations\Migrations\Types\OptionMigrati
     {
         return [
             'plugin_exists'  => 'debug-bar',
-            'plugin_version' => '0.8.*'
+            'plugin_version' => 'debug-bar|0.8.*'
         ];
     }
 }
