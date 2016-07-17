@@ -24,7 +24,6 @@ namespace WP_Migrations;
 
 use Composer\Semver\Comparator;
 
-include('Libraries/Autoloader.php');
 include('vendor/autoload.php');
 
 class Plugin

@@ -6,5 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'WP_Migrations\\' => array($baseDir . '/'),
     'Composer\\Semver\\' => array($vendorDir . '/composer/semver/src'),
 );
