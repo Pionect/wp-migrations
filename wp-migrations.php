@@ -49,9 +49,9 @@ class Plugin
 
     static function plugin_activated()
     {
-        $current_version = get_option('wp-migrations-version') ?: '0.0.0';
+        $currentVersion = get_option('wp-migrations-version') ?: '0.0.0';
 
-        if(Comparator::lessThan($current_version,'0.0.1')) {
+        if(Comparator::lessThan($currentVersion,'0.0.1')) {
             // initial installation
             Migrations\Repository::createRepository();
             OptionVersions\Repository::createRepository();

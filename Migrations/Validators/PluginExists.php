@@ -6,10 +6,10 @@ use WP_Migrations\Libraries\Helper;
 
 class PluginExists implements ValidatorInterface
 {
-    public static function validate($value){
+    public static function validate($pluginName)
+    {
 
-        $plugin_name = $value;
-        return is_array(Helper::get_plugin_data_by_name($plugin_name));
+        return is_array(Helper::get_plugin_data_by_name($pluginName));
 
     }
 }

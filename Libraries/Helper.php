@@ -11,12 +11,12 @@ class Helper
         return str_replace(' ', '', $value);
     }
 
-    public static function get_plugin_data_by_name($plugin_name)
+    public static function get_plugin_data_by_name($pluginName)
     {
         $plugins = get_plugins();
 
         foreach ($plugins as $file => $data) {
-            if (strpos($file, $plugin_name . '/') >= 0) {
+            if (strpos($file, $pluginName . '/') >= 0) {
                 return $data;
             }
         }
