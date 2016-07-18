@@ -10,11 +10,11 @@ Text Domain: wp_migrations
 
 /**
  * TODO
- *
+ * - fix fatal error, when mu-plugin & WPI cli call is made
+ * - migrations creator - pick two versions and create a migration
+ * - add tabs to the value modal [raw, maybe_unserialized, diff]
  * - show real plugin names instead of folder names
  * - change repositories to singletons
- * - change the ListTable option_value to a short summary
- * - add ajax popup for the option_value
  * - add page with a list of all the migrations ran
  * - add a notice if the supplied migrations folder isn't correct
  **/
