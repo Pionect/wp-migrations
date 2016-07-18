@@ -33,7 +33,7 @@ class Plugin
 
     static function init()
     {
-        register_activation_hook(__FILE__, array(static::class, 'plugin_activated'));
+        static::plugin_upgrade();
 
         add_action('admin_init', array(static::class, 'run_migrations'), 100);
         
@@ -48,7 +48,7 @@ class Plugin
         $pluginOptionsProvider->init();
     }
 
-    static function plugin_activated()
+    static function plugin_upgrade()
     {
         $current_version = get_option('wp-migrations-version') ?: '0.0.0';
 
