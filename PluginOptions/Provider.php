@@ -11,8 +11,6 @@ class Provider
     public function __construct(Repository $pluginOptionsRepository)
     {
         $this->repository = $pluginOptionsRepository;
-        //pull option value before we register the filter.
-        $this->repository->getPluginOptions();
     }
 
     public function init()
@@ -32,48 +30,32 @@ class Provider
             return;
         }
 
-        //check if the option isn't allready registered
-        if($this->repository->isRegistered($option)){
+        $storedOptionValues = $this->repository->get($option);
+        /* @var \WP_Migrations\PluginOptions\OptionModel $storedOptionValues */
+
+        if(!is_null($storedOptionValues) && $storedOptionValues->type == 'wordpress'){
             return $bool;
         }
 
-        $files = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $optionModel = $this->determineOptionValues();
 
-        $script = '';
-        if (count($files) >= 5 && array_key_exists('file',$files[4])) {
-            $script = $files[4]['file'];
-        }
-        foreach($files as $file){
-            if($file['function'] == 'get_option' && array_key_exists('file',$file)){
-                $script = $file['file'];
+        if(!is_null($storedOptionValues)){
+            if($optionModel->type == OptionModel::TYPE_THEME || $optionModel->type == OptionModel::TYPE_UNKNOWN){
+                //the option allready exists and this one can't supersede the stored one.
+                return $bool;
+            }
+            if($optionModel->type == OptionModel::TYPE_PLUGIN &&
+                in_array($storedOptionValues->type,[OptionModel::TYPE_PLUGIN,OptionModel::TYPE_WORDPRESS]) ){
+                return $bool;
+            }
+            if($optionModel->type == OptionModel::TYPE_WORDPRESS &&
+                $storedOptionValues->type == OptionModel::TYPE_WORDPRESS) {
+                // types are equal so no need to supersede the stored one.
+                return $bool;
             }
         }
 
-        if(strpos($script,'wp-includes') || strpos($script, 'wp-admin')){
-            $type = 'wordpress';
-            $group = 'wordpress';
-        } elseif (strpos($script, 'wp-content/plugins')) {
-            $folders = explode(DIRECTORY_SEPARATOR,substr($script,strpos($script,'plugins/')));
-            $type = 'plugin';
-            $group = $folders[1];
-        } elseif (strpos($script, 'wp-content/themes')) {
-            $folders = explode(DIRECTORY_SEPARATOR,substr($script,strpos($script,'themes/')));
-            $type = 'theme';
-            $group = $folders[1];
-        } else {
-            $type = 'unknown';
-            $group = 'unknown';
-        }
-
-        $files = null;
-
-        $object = (object)[
-            'script' => $script,
-            'type' => $type,
-            'group' => $group
-        ];
-
-        $this->repository->cache($option,$object);
+        $this->repository->cache($option,$optionModel);
 
         return $bool;
     }
@@ -81,5 +63,41 @@ class Provider
     public function save_plugin_options(){
         remove_filter( 'all', [$this, 'pre_option_'],1 );
         $this->repository->save();
+    }
+
+    private function determineOptionValues(){
+        $files = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+        $optionModel = new OptionModel();
+        $optionModel->script = '';
+
+        if (count($files) >= 5 && array_key_exists('file',$files[4])) {
+            $optionModel->script = $files[4]['file'];
+        }
+        foreach($files as $file){
+            if($file['function'] == 'get_option' && array_key_exists('file',$file)){
+                $optionModel->script = $file['file'];
+            }
+        }
+
+        if(strpos($optionModel->script,'wp-includes') || strpos($optionModel->script, 'wp-admin')){
+            $optionModel->type = OptionModel::TYPE_WORDPRESS;
+            $optionModel->group = 'wordpress';
+        } elseif (strpos($optionModel->script, 'wp-content/plugins')) {
+            $folders = explode(DIRECTORY_SEPARATOR,substr($optionModel->script,strpos($optionModel->script,'plugins/')));
+            $optionModel->type = OptionModel::TYPE_PLUGIN;
+            $optionModel->group = $folders[1];
+        } elseif (strpos($optionModel->script, 'wp-content/themes')) {
+            $folders = explode(DIRECTORY_SEPARATOR,substr($optionModel->script,strpos($optionModel->script,'themes/')));
+            $optionModel->type = OptionModel::TYPE_THEME;
+            $optionModel->group = $folders[1];
+        } else {
+            $optionModel->type = OptionModel::TYPE_UNKNOWN;
+            $optionModel->group = OptionModel::TYPE_UNKNOWN;
+        }
+
+        $files = null;
+
+        return $optionModel;
     }
 }

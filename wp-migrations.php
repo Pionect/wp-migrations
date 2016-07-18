@@ -12,7 +12,6 @@ Text Domain: wp_migrations
  * TODO
  *
  * - show real plugin names instead of folder names
- * - overwrite PluginOption in order of theme -> plugin -> wordpress core
  * - change repositories to singletons
  * - change the ListTable option_value to a short summary
  * - add ajax popup for the option_value
@@ -24,7 +23,6 @@ namespace WP_Migrations;
 
 use Composer\Semver\Comparator;
 
-include('Libraries/Autoloader.php');
 include('vendor/autoload.php');
 
 class Plugin
@@ -50,9 +48,9 @@ class Plugin
 
     static function plugin_upgrade()
     {
-        $current_version = get_option('wp-migrations-version') ?: '0.0.0';
+        $currentVersion = get_option('wp-migrations-version') ?: '0.0.0';
 
-        if(Comparator::lessThan($current_version,'0.0.1')) {
+        if(Comparator::lessThan($currentVersion,'0.0.1')) {
             // initial installation
             Migrations\Repository::createRepository();
             OptionVersions\Repository::createRepository();

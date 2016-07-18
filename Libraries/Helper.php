@@ -11,12 +11,12 @@ class Helper
         return str_replace(' ', '', $value);
     }
 
-    public static function get_plugin_data_by_name($plugin_name)
+    public static function get_plugin_data_by_name($pluginName)
     {
         $plugins = get_plugins();
 
         foreach ($plugins as $file => $data) {
-            if (strpos($file, $plugin_name . '/') >= 0) {
+            if (strpos($file, $pluginName . '/') >= 0) {
                 return $data;
             }
         }
@@ -24,19 +24,4 @@ class Helper
         return false;
     }
 
-    public static function is_plugin_installed($plugin_name)
-    {
-        return is_array(static::get_plugin_data_by_name($plugin_name));
-    }
-
-    public static function plugin_version($plugin_name)
-    {
-        $data = static::get_plugin_data_by_name($plugin_name);
-        if (is_array($data)) {
-            return $data['Version'];
-        } else {
-            return false;
-        }
-
-    }
 }

@@ -7,7 +7,13 @@ class Repository
 {
     const OPTION_NAME = "wp-migrations-plugin-options";
 
-    private $pluginOptions;
+    private $options;
+
+    public function __construct()
+    {
+        $optionValues  = get_option(self::OPTION_NAME);
+        $this->options = $optionValues ?: [];
+    }
 
     /**
      * Create the plugin options repository data store.
@@ -16,7 +22,7 @@ class Repository
      */
     public static function createRepository()
     {
-        \add_option(self::OPTION_NAME, []);
+        add_option(self::OPTION_NAME, []);
     }
 
     /**
@@ -24,36 +30,38 @@ class Repository
      */
     public function getPluginOptions()
     {
-        if (is_null($this->pluginOptions)) {
-            $option_values       = get_option(self::OPTION_NAME);
-            $this->pluginOptions = $option_values ?: [];
-        }
-
-        return $this->pluginOptions;
+        return $this->options;
     }
 
     /**
      * Register a option's owner
      *
-     * @param  string $option_name
-     * @param  string $owner
+     * @param  string $optionName
+     * @param  object $object
      * @return void
      */
-    public function cache($option_name,$object)
+    public function cache($optionName, $object)
     {
-        $pluginOptions = $this->getPluginOptions();
-        if(!array_key_exists($option_name,$pluginOptions)) {
-            $this->pluginOptions[$option_name] = $object;
+        $options = $this->getPluginOptions();
+        if (!array_key_exists($optionName, $options)) {
+            $this->options[$optionName] = $object;
         }
     }
 
-    public function save(){
-        update_option(self::OPTION_NAME, $this->pluginOptions);
+    public function save()
+    {
+        update_option(self::OPTION_NAME, $this->options);
     }
 
-    public function isRegistered($option_name){
-        $pluginOptions = $this->getPluginOptions();
-        return array_key_exists($option_name,$pluginOptions);
+    public function get($optionName)
+    {
+        $options = $this->getPluginOptions();
+        if (!array_key_exists($optionName, $options)) {
+            return null;
+        } else {
+            return $options[$optionName];
+        }
     }
+
 
 }

@@ -10,5 +10,10 @@
             "name": "Tomas van Rijsse",
             "email": "tomas@pionect.nl"
         }
-    ]
+    ],
+    "autoload" : {
+      "psr-4": {
+        "WP_Migrations\\": "."
+      }
+    }
 }

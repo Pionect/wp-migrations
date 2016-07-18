@@ -24,7 +24,7 @@ class Provider
         if ($option[0] == '_') {
             return;
         }
-        if ('wp-migrations-plugin-options' !== $option) {
+        if ('wp-migrations-plugin-options' === $option) {
             return;
         }
 
