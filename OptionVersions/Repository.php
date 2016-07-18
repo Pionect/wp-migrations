@@ -88,8 +88,8 @@ class Repository
         $args[] = $page;
         $args[] = $per_page;
 
-        $save_query = $wpdb->prepare($query,$args);
-        return $wpdb->get_results($save_query );
+        $safe_query = $wpdb->prepare($query,$args);
+        return $wpdb->get_results($safe_query );
     }
 
     public function getCount($option_name = null){
@@ -105,6 +105,17 @@ class Repository
 
 
         return $wpdb->get_var( $query );
+    }
+
+    public function getById($id){
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . self::TABLE_NAME;
+
+        $query = "SELECT * FROM $table_name WHERE `id` = %d";
+
+        $safe_query = $wpdb->prepare($query,[$id]);
+        return $wpdb->get_row($safe_query );
     }
 
 }

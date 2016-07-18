@@ -67,7 +67,8 @@ class ListTable extends WP_List_Table
                 ];
             }
 
-            $this->items[] = [
+            $this->items[] = (object) [
+                'id'         => $optionChange->id,
                 'type'       => $pluginOption->type,
                 'group'      => $pluginOption->group,
                 'option'     => $optionChange->option_name,
@@ -86,10 +87,29 @@ class ListTable extends WP_List_Table
             case 'value':
             case 'user_id':
             case 'updated_at':
-                return $item[ $column_name ];
+                return $item->$column_name;
             default:
                 return print_r( $item, true ) ; //Show the whole array for troubleshooting purposes
         }
+    }
+
+    function column_value( $item ){
+        $valueModalContentUrl = add_query_arg(
+            array(
+                'action'    => 'wp-migrations-value-modal',
+                'optionversion_id'  => $item->id,
+                'TB_iframe' => 'true',
+                'width'     => '600',
+                'height'    => '550',
+            ),
+            'admin-ajax.php'
+        );
+
+        return sprintf( '<a href="%1$s" class="thickbox" title="%3$s">%2$s</a>',
+            esc_url( $valueModalContentUrl ),
+            substr($item->value,0,30) . (strlen($item->value)>30 ? '...' :''),
+            $item->option .' on '. $item->updated_at
+        );
     }
 
     function get_sortable_columns() {
