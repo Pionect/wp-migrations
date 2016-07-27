@@ -181,9 +181,13 @@ class Migrator
      */
     public function resolve($file)
     {
-        $file = implode('_', array_slice(explode('_', $file), 4));
+        preg_match("/[0-9_]{0,50}([a-z_]{0,50})/i", $file, $matches);
 
-        $class = $this->migrations_namespace.'\\'. Helper::studly($file);
+        if(count($matches)!=2 || $matches[1] == ""){
+            return null;
+        }
+
+        $class = $this->migrations_namespace.'\\'. Helper::studly($matches[1]);
 
         return new $class;
     }
