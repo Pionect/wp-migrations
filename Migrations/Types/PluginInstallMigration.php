@@ -9,7 +9,7 @@ abstract class PluginInstallMigration
     {
         $file = $this->get_filename();
 
-        $command = "cd " . APP_DIR . " && wp plugin install $file --activate --path=public";
+        $command = "cd " . ABSPATH . " && wp plugin install $file --activate";
 
         $output = exec($command);
     }

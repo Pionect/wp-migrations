@@ -7,6 +7,6 @@ class FileExists implements ValidatorInterface
 {
     public static function validate($filename)
     {
-        return file_exists(APP_DIR. '/' .$filename);
+        return file_exists($filename);
     }
 }
