@@ -36,7 +36,7 @@ class Validator
         } else {
             //if the name isn't a FQN then try to see if it's a validator from us
             $validator_class_name = Helper::studly($rule);
-            $namespace            = '\WP_Migrations\Validators\\';
+            $namespace            = '\WP_Migrations\Migrations\Validators\\';
             if (class_exists($namespace . $validator_class_name)) {
                 $fqn       = $namespace . $validator_class_name;
                 $validator = new $fqn;
