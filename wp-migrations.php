@@ -17,6 +17,7 @@ Text Domain: wp_migrations
  * - change repositories to singletons
  * - add page with a list of all the migrations ran
  * - add a notice if the supplied migrations folder isn't correct
+ * - add a setting to enable/disable optionVersions
  **/
 
 namespace WP_Migrations;

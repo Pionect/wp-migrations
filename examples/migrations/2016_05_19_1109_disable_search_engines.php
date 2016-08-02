@@ -2,7 +2,9 @@
 
 namespace Migrations;
 
-class DisableSearchEngines extends \WP_Migrations\Migrations\Types\OptionMigration
+use WP_Migrations\Migrations\Types\OptionMigration;
+
+class DisableSearchEngines extends OptionMigration
 {
 
     /**
