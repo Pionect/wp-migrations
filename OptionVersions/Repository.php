@@ -27,7 +27,7 @@ class Repository
           option_name VARCHAR(191) NOT NULL,
           option_value LONGTEXT NOT NULL,
           user_id mediumint(9),
-          updated_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+          updated_at datetime NOT NULL,
           PRIMARY KEY (id)
         ) $charset_collate;";
         $charset_collate = $wpdb->get_charset_collate();
@@ -57,6 +57,7 @@ class Repository
                 'option_name'  => $option,
                 'option_value' => $option_value,
                 'user_id'      => $user_id,
+                'updated_at'   => date('Y-m-d H:i:s')
             ],
             ['%s', '%s', '%d']
         );
