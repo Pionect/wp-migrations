@@ -4,6 +4,7 @@ namespace WP_Migrations\Migrations;
 
 
 use WP_Migrations\Libraries\Helper;
+use WP_Migrations\Migrations\Validators\ValidatorInterface;
 
 class Validator
 {
@@ -46,7 +47,7 @@ class Validator
         if (!$validator) {
             throw new ValidatorMissingException($rule);
         }
-        if ($validator instanceof \WP_Migrations\Migrations\Validators\ValidatorInterface == false) {
+        if ($validator instanceof ValidatorInterface == false) {
             throw new ValidatorWithoutInterfaceException($rule);
         }
 
