@@ -1,17 +1,17 @@
 [
     {
         "name": "composer/semver",
-        "version": "1.4.0",
-        "version_normalized": "1.4.0.0",
+        "version": "1.4.1",
+        "version_normalized": "1.4.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/composer/semver.git",
-            "reference": "84c47f3d8901440403217afc120683c7385aecb8"
+            "reference": "03c9de5aa25e7672c4ad251eeaba0c47a06c8b98"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/semver/zipball/84c47f3d8901440403217afc120683c7385aecb8",
-            "reference": "84c47f3d8901440403217afc120683c7385aecb8",
+            "url": "https://api.github.com/repos/composer/semver/zipball/03c9de5aa25e7672c4ad251eeaba0c47a06c8b98",
+            "reference": "03c9de5aa25e7672c4ad251eeaba0c47a06c8b98",
             "shasum": ""
         },
         "require": {
@@ -21,7 +21,7 @@
             "phpunit/phpunit": "^4.5 || ^5.0.5",
             "phpunit/phpunit-mock-objects": "2.3.0 || ^3.0"
         },
-        "time": "2016-03-30 13:16:03",
+        "time": "2016-06-02 09:04:51",
         "type": "library",
         "extra": {
             "branch-alias": {
