@@ -3,7 +3,7 @@
 namespace WP_Migrations\Migrations\Types;
 
 
-abstract class PluginInstallMigration
+abstract class PluginDownloadMigration
 {
     public function run()
     {
@@ -42,9 +42,8 @@ abstract class PluginInstallMigration
     }
 
     /**
-     * Return the filename, the plugin name or a url.
-     * http://wp-cli.org/commands/plugin/install/
-     * @return string plugin|zip|url
+     * Return the plugin slug
+     * @return string plugin slug
      */
     abstract function get_plugin_name();
 

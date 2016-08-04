@@ -2,14 +2,18 @@
 
 namespace WP_Migrations\Migrations\Types;
 
-
+/**
+ * Class PluginInstallMigration
+ * Requires WP_CLI https://wp-cli.org
+ * @package WP_Migrations\Migrations\Types
+ */
 abstract class PluginInstallMigration
 {
     public function run()
     {
-        $file = $this->get_filename();
+        $plugin = $this->get_plugin_name();
 
-        $command = "cd " . ABSPATH . " && wp plugin install $file --activate";
+        $command = "cd " . ABSPATH . " && wp plugin install $plugin --activate";
 
         $output = exec($command);
     }
@@ -17,13 +21,15 @@ abstract class PluginInstallMigration
     public function get_validation_rules()
     {
         return [
-            'file_exists'   => $this->get_filename()
+            'file_exists'   => $this->get_plugin_name()
         ];
     }
 
     /**
-     * @return string The option_name from the wp_options table
+     * A plugin slug, the path to a local zip file, or URL to a remote zip file.
+     * https://wp-cli.org/commands/plugin/install/
+     * @return string <plugin slug|zip|url>
      */
-    abstract function get_filename();
+    abstract function get_plugin_name();
 
 }
