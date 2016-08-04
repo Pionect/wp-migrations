@@ -18,13 +18,6 @@ abstract class PluginInstallMigration
         $output = exec($command);
     }
 
-    public function get_validation_rules()
-    {
-        return [
-            'file_exists'   => $this->get_plugin_name()
-        ];
-    }
-
     /**
      * A plugin slug, the path to a local zip file, or URL to a remote zip file.
      * https://wp-cli.org/commands/plugin/install/
