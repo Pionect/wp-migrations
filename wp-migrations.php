@@ -32,14 +32,19 @@ class Plugin
 
     static function init()
     {
-        static::plugin_upgrade();
-
-        add_action('admin_init', array(static::class, 'run_migrations'), 100);
-
         if(!class_exists('\WP_Migrations\OptionVersions\Provider')){
             return;
         }
-
+    
+        if(!get_option('siteurl')){
+            return;
+        }
+    
+        static::plugin_upgrade();
+    
+        add_action('admin_init', array(static::class, 'run_migrations'), 100);
+    
+    
         $optionVersionsProvider = new OptionVersions\Provider(
             new OptionVersions\Repository()
         );
