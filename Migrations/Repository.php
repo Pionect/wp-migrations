@@ -70,6 +70,7 @@ class Repository implements RepositoryInterface
             'file'  => $file,
             'batch' => $batch
         ]);
+        $this->migrations_ran = $migrations_ran;
         update_option(self::OPTION_NAME, $migrations_ran);
     }
 
