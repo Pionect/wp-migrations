@@ -4,6 +4,7 @@ namespace WP_Migrations\Migrations;
 
 use WP_Migrations\Libraries\Helper;
 use WP_Migrations\Migrations\Types\OptionMigration;
+use WP_Migrations\Migrations\Types\PluginDownloadMigration;
 use WP_Migrations\Migrations\Types\PluginInstallMigration;
 
 class Migrator
@@ -117,7 +118,8 @@ class Migrator
         }
 
         if(is_subclass_of($migration,OptionMigration::class) ||
-            is_subclass_of($migration,PluginInstallMigration::class)) {
+            is_subclass_of($migration,PluginInstallMigration::class) ||
+            is_subclass_of($migration,PluginDownloadMigration::class)) {
             $migration->run();
         } else {
             $migration->up();
