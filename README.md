@@ -5,6 +5,19 @@ Keeping options in sync is generally done by hand and quite often a setting is f
 The implementation fo this plugin is largely based upon the [Migrator](https://github.com/laravel/framework/tree/5.4/src/Illuminate/Database/Migrations) of Laravel.   
 To find out what options have been changed an overview is available listing all the updated option.
 
+- [wp-migrations](#wp-migrations)
+  * [Installation](#installation)
+    + [Install with composer](#install-with-composer)
+    + [Install with git](#install-with-git)
+  * [Usage](#usage)
+    + [Setup](#setup)
+    + [Creating migrations](#creating-migrations)
+      - [Migration types](#migration-types)
+      - [Validator](#validator)
+    + [How to find out what options where changed?](#how-to-find-out-what-options-where-changed-)
+  * [Contributing](#contributing)
+  * [License](#license)
+
 ## Installation
 The plugin isn't available in the WordPress plugin repository yet.
 For now the only ways to install the plugin is via composer or git.
@@ -44,7 +57,7 @@ git clone git@github.com:pionect/wp-migrations.git
 ```
 
 ## Usage
-### Basic setup
+### Setup
 The plugin doesn't migrate a thing out of the box. It waits for you to tell where the directory is with all the migrations.
 Add a filter to your functions.php or your plugin.
 ```php
@@ -64,7 +77,7 @@ add_filter('wpmigrations_namespace', 'my_wpmigrations_namespace');
 In this folder you can place a file per migration.
 Some examples are supplied in the [examples](examples) directory.
 
-### Creating the migrations
+### Creating migrations
 Some expectations about migrations are:
 - Migrations file names are prefixed with numbers and underscores. 
 For example `1_first_migration` and `2_second_migration` or `2017_03_01_first_migration` and `2017_03_02_second_migration`
