@@ -2,6 +2,7 @@
     "name": "pionect/wp-migrations",
     "description": "A plugin designed to enable migrations inspired by the migrations from Laravel",
     "type": "wordpress-plugin",
+    "license": "MIT",
     "require": {
         "composer/semver": "^1.4"
     },
