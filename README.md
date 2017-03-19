@@ -2,21 +2,22 @@
 
 This WordPress plugin helps to synchronize settings and options between local environments and production.
 Keeping options in sync is generally done by hand and quite often a setting is forgotten when the site is deployed or updated.
-The implementation fo this plugin is largely based upon the [Migrator](https://github.com/laravel/framework/tree/5.4/src/Illuminate/Database/Migrations) of Laravel.   
+The implementation of this plugin is largely based upon the [Migrator](https://github.com/laravel/framework/tree/5.4/src/Illuminate/Database/Migrations) of Laravel. 
 To find out what options have been changed an overview is available listing all the updated option.
 
-- [wp-migrations](#wp-migrations)
-  * [Installation](#installation)
-    + [Install with composer](#install-with-composer)
-    + [Install with git](#install-with-git)
-  * [Usage](#usage)
-    + [Setup](#setup)
-    + [Creating migrations](#creating-migrations)
-      - [Migration types](#migration-types)
-      - [Validator](#validator)
-    + [How to find out what options where changed?](#how-to-find-out-what-options-where-changed-)
-  * [Contributing](#contributing)
-  * [License](#license)
+## Table of contents
+
+* [Installation](#installation)
+  + [Install with composer](#install-with-composer)
+  + [Install with git](#install-with-git)
+* [Usage](#usage)
+  + [Setup](#setup)
+  + [Creating migrations](#creating-migrations)
+    - [Migration types](#migration-types)
+    - [Validator](#validator)
+  + [How to find out what options where changed?](#how-to-find-out-what-options-where-changed)
+* [Contributing](#contributing)
+* [License](#license)
 
 ## Installation
 The plugin isn't available in the WordPress plugin repository yet.
