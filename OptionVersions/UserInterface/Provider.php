@@ -1,14 +1,16 @@
 <?php
 
 
-namespace WP_Migrations\OptionVersions;
+namespace WP_Migrations\OptionVersions\UserInterface;
 
+
+use WP_Migrations\OptionVersions\Repositories\OptionVersionRepository;
 
 class Provider
 {
     protected $repository;
 
-    public function __construct(Repository $optionVersionRepository)
+    public function __construct(OptionVersionRepository $optionVersionRepository)
     {
         $this->repository = $optionVersionRepository;
     }

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace WP_Migrations\PluginOptions;
+namespace WP_Migrations\OptionVersions\Repositories;
 
 
-class OptionModel
+class OptionScriptsModel
 {
 
     public $script;

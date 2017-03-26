@@ -1,10 +1,12 @@
 <?php
 
 
-namespace WP_Migrations\OptionVersions;
+namespace WP_Migrations\OptionVersions\UserInterface;
 
 
 use WP_List_Table;
+use WP_Migrations\OptionVersions\Repositories\OptionScriptsRepository;
+use WP_Migrations\OptionVersions\Repositories\OptionVersionRepository;
 
 class ListTable extends WP_List_Table
 {
@@ -23,8 +25,8 @@ class ListTable extends WP_List_Table
 
     function prepare_items() {
 
-        $pluginOptionsRepository = new \WP_Migrations\PluginOptions\Repository();
-        $optionVersionsRepository = new \WP_Migrations\OptionVersions\Repository();
+        $pluginOptionsRepository = new OptionScriptsRepository();
+        $optionVersionsRepository = new OptionVersionRepository();
 
         $per_page = 20;
         $current_page = $this->get_pagenum();
@@ -120,8 +122,8 @@ class ListTable extends WP_List_Table
     }
 
     function extra_tablenav( $which ) {
-        $pluginOptionsRepository = new \WP_Migrations\PluginOptions\Repository();
-        $optionVersionsRepository = new \WP_Migrations\OptionVersions\Repository();
+        $pluginOptionsRepository = new OptionScriptsRepository();
+        $optionVersionsRepository = new OptionVersionRepository();
 
         $types = [];
         foreach($pluginOptionsRepository->getPluginOptions() as $option_name => $pluginOption){

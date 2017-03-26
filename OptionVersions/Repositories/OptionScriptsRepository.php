@@ -1,11 +1,11 @@
 <?php
 
-namespace WP_Migrations\PluginOptions;
+namespace WP_Migrations\OptionVersions\Repositories;
 
 
-class Repository
+class OptionScriptsRepository
 {
-    const OPTION_NAME = "wp-migrations-plugin-options";
+    const OPTION_NAME = "wp-migrations-option-scripts";
 
     private $options;
 
