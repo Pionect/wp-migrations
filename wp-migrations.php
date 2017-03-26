@@ -34,7 +34,7 @@ class Plugin
 
     static function init()
     {
-        if(!class_exists('\WP_Migrations\OptionVersions\Tracking\Provider')){
+        if(!class_exists('\WP_Migrations\OptionVersions\Tracking\OptionScriptProvider')){
             return;
         }
     
@@ -47,10 +47,15 @@ class Plugin
         add_action('admin_init', array(static::class, 'run_migrations'), 100);
     
     
-        $optionVersionsTrackingProvider = new OptionVersions\Tracking\Provider(
+        $optionScriptTrackingProvider = new OptionVersions\Tracking\OptionScriptProvider(
             new OptionScriptRepository()
         );
-        $optionVersionsTrackingProvider->init();
+        $optionScriptTrackingProvider->init();
+
+        $optionVersionTrackingProvider = new OptionVersions\Tracking\OptionVersionProvider(
+            new OptionVersionRepository()
+        );
+        $optionVersionTrackingProvider->init();
 
         $optionVersionsUIProvider = new OptionVersions\UserInterface\Provider(
             new OptionVersionRepository()

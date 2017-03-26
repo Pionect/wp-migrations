@@ -6,7 +6,7 @@ namespace WP_Migrations\OptionVersions\Tracking;
 use WP_Migrations\OptionVersions\Repositories\OptionScriptModel;
 use WP_Migrations\OptionVersions\Repositories\OptionScriptRepository;
 
-class Provider
+class OptionScriptProvider
 {
 
     protected $repository;
@@ -74,27 +74,28 @@ class Provider
         $optionModel = new OptionScriptModel();
         $optionModel->script = '';
 
-        if (count($files) >= 5 && array_key_exists('file',$files[4])) {
-            $optionModel->script = $files[4]['file'];
-        }
         foreach($files as $file){
             if($file['function'] == 'get_option' && array_key_exists('file',$file)){
                 $optionModel->script = $file['file'];
             }
         }
+        if($optionModel->script == ""){
+            ddd($files);
+        }
 
         if(strpos($optionModel->script,'wp-includes') || strpos($optionModel->script, 'wp-admin')){
             $optionModel->type = OptionScriptModel::TYPE_WORDPRESS;
             $optionModel->group = 'wordpress';
-        } elseif (strpos($optionModel->script, 'wp-content/plugins')) {
-            $folders = explode(DIRECTORY_SEPARATOR,substr($optionModel->script,strpos($optionModel->script,'plugins/')));
+        } elseif (strpos($optionModel->script, 'wp-content'.DIRECTORY_SEPARATOR.'plugins')) {
+            $folders = explode(DIRECTORY_SEPARATOR,substr($optionModel->script,strpos($optionModel->script,'plugins'.DIRECTORY_SEPARATOR)));
             $optionModel->type = OptionScriptModel::TYPE_PLUGIN;
             $optionModel->group = $folders[1];
-        } elseif (strpos($optionModel->script, 'wp-content/themes')) {
-            $folders = explode(DIRECTORY_SEPARATOR,substr($optionModel->script,strpos($optionModel->script,'themes/')));
+        } elseif (strpos($optionModel->script, 'wp-content'.DIRECTORY_SEPARATOR.'themes')) {
+            $folders = explode(DIRECTORY_SEPARATOR,substr($optionModel->script,strpos($optionModel->script,'themes'.DIRECTORY_SEPARATOR)));
             $optionModel->type = OptionScriptModel::TYPE_THEME;
             $optionModel->group = $folders[1];
         } else {
+            ddd($optionModel);
             $optionModel->type = OptionScriptModel::TYPE_UNKNOWN;
             $optionModel->group = OptionScriptModel::TYPE_UNKNOWN;
         }
