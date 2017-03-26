@@ -12,6 +12,11 @@ class OptionScriptRepository
     public function __construct()
     {
         $optionValues  = get_option(self::OPTION_NAME);
+        foreach ($optionValues as $option_name => $optionScriptData) {
+            $optionScript = new OptionScriptModel();
+            $optionScript->unserialize($optionScriptData);
+            $options[$option_name] = $optionScript;
+        }
         $this->options = $optionValues ?: [];
     }
 
@@ -50,7 +55,11 @@ class OptionScriptRepository
 
     public function save()
     {
-        update_option(self::OPTION_NAME, $this->options);
+        $options = [];
+        foreach ($this->options as $option_name => $optionScript) {
+            $options[$option_name] = $optionScript->serialize();
+        }
+        update_option(self::OPTION_NAME, $options);
     }
 
     public function get($optionName)
