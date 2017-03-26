@@ -23,7 +23,7 @@ Text Domain: wp_migrations
 namespace WP_Migrations;
 
 use Composer\Semver\Comparator;
-use WP_Migrations\OptionVersions\Repositories\OptionScriptsRepository;
+use WP_Migrations\OptionVersions\Repositories\OptionScriptRepository;
 use WP_Migrations\OptionVersions\Repositories\OptionVersionRepository;
 
 include('vendor/autoload.php');
@@ -47,15 +47,15 @@ class Plugin
         add_action('admin_init', array(static::class, 'run_migrations'), 100);
     
     
-        $optionVersionsProvider = new OptionVersions\Tracking\Provider(
-            new OptionScriptsRepository()
+        $optionVersionsTrackingProvider = new OptionVersions\Tracking\Provider(
+            new OptionScriptRepository()
         );
-        $optionVersionsProvider->init();
+        $optionVersionsTrackingProvider->init();
 
-        $pluginOptionsProvider = new OptionVersions\UserInterface\Provider(
+        $optionVersionsUIProvider = new OptionVersions\UserInterface\Provider(
             new OptionVersionRepository()
         );
-        $pluginOptionsProvider->init();
+        $optionVersionsUIProvider->init();
     }
 
     static function plugin_upgrade()
@@ -66,7 +66,7 @@ class Plugin
             // initial installation
             Migrations\Repository::createRepository();
             OptionVersionRepository::createRepository();
-            OptionScriptsRepository::createRepository();
+            OptionScriptRepository::createRepository();
         }
 
         add_option('wp-migrations-version', self::VERSION);

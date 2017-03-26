@@ -3,7 +3,7 @@
 namespace WP_Migrations\OptionVersions\Repositories;
 
 
-class OptionScriptsRepository
+class OptionScriptRepository
 {
     const OPTION_NAME = "wp-migrations-option-scripts";
 
@@ -28,7 +28,7 @@ class OptionScriptsRepository
     /**
      * @return array
      */
-    public function getPluginOptions()
+    public function getOptions()
     {
         return $this->options;
     }
@@ -42,7 +42,7 @@ class OptionScriptsRepository
      */
     public function cache($optionName, $object)
     {
-        $options = $this->getPluginOptions();
+        $options = $this->getOptions();
         if (!array_key_exists($optionName, $options)) {
             $this->options[$optionName] = $object;
         }
@@ -55,7 +55,7 @@ class OptionScriptsRepository
 
     public function get($optionName)
     {
-        $options = $this->getPluginOptions();
+        $options = $this->getOptions();
         if (!array_key_exists($optionName, $options)) {
             return null;
         } else {

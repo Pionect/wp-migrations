@@ -3,17 +3,17 @@
 namespace WP_Migrations\OptionVersions\Tracking;
 
 
-use WP_Migrations\OptionVersions\Repositories\OptionScriptsModel;
-use WP_Migrations\OptionVersions\Repositories\OptionScriptsRepository;
+use WP_Migrations\OptionVersions\Repositories\OptionScriptModel;
+use WP_Migrations\OptionVersions\Repositories\OptionScriptRepository;
 
 class Provider
 {
 
     protected $repository;
 
-    public function __construct(OptionScriptsRepository $pluginOptionsRepository)
+    public function __construct(OptionScriptRepository $OptionScriptRepository)
     {
-        $this->repository = $pluginOptionsRepository;
+        $this->repository = $OptionScriptRepository;
     }
 
     public function init()
@@ -34,7 +34,7 @@ class Provider
         }
 
         $storedOptionValues = $this->repository->get($option);
-        /* @var \WP_Migrations\PluginOptions\OptionModel $storedOptionValues */
+        /* @var OptionScriptModel $storedOptionValues */
 
         if(!is_null($storedOptionValues) && $storedOptionValues->type == 'wordpress'){
             return $bool;
@@ -43,16 +43,16 @@ class Provider
         $optionModel = $this->determineOptionValues();
 
         if(!is_null($storedOptionValues)){
-            if($optionModel->type == OptionScriptsModel::TYPE_THEME || $optionModel->type == OptionScriptsModel::TYPE_UNKNOWN){
+            if($optionModel->type == OptionScriptModel::TYPE_THEME || $optionModel->type == OptionScriptModel::TYPE_UNKNOWN){
                 //the option allready exists and this one can't supersede the stored one.
                 return $bool;
             }
-            if($optionModel->type == OptionScriptsModel::TYPE_PLUGIN &&
-                in_array($storedOptionValues->type,[OptionScriptsModel::TYPE_PLUGIN, OptionScriptsModel::TYPE_WORDPRESS]) ){
+            if($optionModel->type == OptionScriptModel::TYPE_PLUGIN &&
+                in_array($storedOptionValues->type,[OptionScriptModel::TYPE_PLUGIN, OptionScriptModel::TYPE_WORDPRESS]) ){
                 return $bool;
             }
-            if($optionModel->type == OptionScriptsModel::TYPE_WORDPRESS &&
-                $storedOptionValues->type == OptionScriptsModel::TYPE_WORDPRESS) {
+            if($optionModel->type == OptionScriptModel::TYPE_WORDPRESS &&
+                $storedOptionValues->type == OptionScriptModel::TYPE_WORDPRESS) {
                 // types are equal so no need to supersede the stored one.
                 return $bool;
             }
@@ -71,7 +71,7 @@ class Provider
     private function determineOptionValues(){
         $files = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
-        $optionModel = new OptionScriptsModel();
+        $optionModel = new OptionScriptModel();
         $optionModel->script = '';
 
         if (count($files) >= 5 && array_key_exists('file',$files[4])) {
@@ -84,19 +84,19 @@ class Provider
         }
 
         if(strpos($optionModel->script,'wp-includes') || strpos($optionModel->script, 'wp-admin')){
-            $optionModel->type = OptionScriptsModel::TYPE_WORDPRESS;
+            $optionModel->type = OptionScriptModel::TYPE_WORDPRESS;
             $optionModel->group = 'wordpress';
         } elseif (strpos($optionModel->script, 'wp-content/plugins')) {
             $folders = explode(DIRECTORY_SEPARATOR,substr($optionModel->script,strpos($optionModel->script,'plugins/')));
-            $optionModel->type = OptionScriptsModel::TYPE_PLUGIN;
+            $optionModel->type = OptionScriptModel::TYPE_PLUGIN;
             $optionModel->group = $folders[1];
         } elseif (strpos($optionModel->script, 'wp-content/themes')) {
             $folders = explode(DIRECTORY_SEPARATOR,substr($optionModel->script,strpos($optionModel->script,'themes/')));
-            $optionModel->type = OptionScriptsModel::TYPE_THEME;
+            $optionModel->type = OptionScriptModel::TYPE_THEME;
             $optionModel->group = $folders[1];
         } else {
-            $optionModel->type = OptionScriptsModel::TYPE_UNKNOWN;
-            $optionModel->group = OptionScriptsModel::TYPE_UNKNOWN;
+            $optionModel->type = OptionScriptModel::TYPE_UNKNOWN;
+            $optionModel->group = OptionScriptModel::TYPE_UNKNOWN;
         }
 
         $files = null;
