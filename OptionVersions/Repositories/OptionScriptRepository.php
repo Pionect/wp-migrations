@@ -11,11 +11,13 @@ class OptionScriptRepository
 
     public function __construct()
     {
-        $optionValues  = get_option(self::OPTION_NAME);
-        foreach ($optionValues as $option_name => $optionScriptData) {
-            $optionScript = new OptionScriptModel();
-            $optionScript->unserialize($optionScriptData);
-            $options[$option_name] = $optionScript;
+        $optionValues = get_option(self::OPTION_NAME);
+        if (is_array($optionValues)) {
+            foreach ($optionValues as $option_name => $optionScriptData) {
+                $optionScript = new OptionScriptModel();
+                $optionScript->unserialize($optionScriptData);
+                $optionValues[$option_name] = $optionScript;
+            }
         }
         $this->options = $optionValues ?: [];
     }
