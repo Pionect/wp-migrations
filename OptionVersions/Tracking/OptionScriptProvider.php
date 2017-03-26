@@ -9,6 +9,16 @@ use WP_Migrations\OptionVersions\Repositories\OptionScriptRepository;
 class OptionScriptProvider
 {
 
+    /**
+     * When an option is fetched we'll try to get a clue which script is fetching it.
+     * it is hard to find out which scripts was responsible when an option is saved
+     * so we'll try to connect the option with a script when the script (plugin/theme) requests for it.
+     *
+     * There's only one issue: there is no general filter in get_option, there is a filter pre_option_$optionname
+     * So we hook into all filters and only continue our quest if the filters name matches pre_option
+     *
+     */
+
     protected $repository;
 
     public function __construct(OptionScriptRepository $OptionScriptRepository)
@@ -33,26 +43,27 @@ class OptionScriptProvider
             return;
         }
 
-        $storedOptionValues = $this->repository->get($option);
-        /* @var OptionScriptModel $storedOptionValues */
+        $storedOptionScript = $this->repository->get($option);
+        /* @var OptionScriptModel $storedOptionScript */
 
-        if(!is_null($storedOptionValues) && $storedOptionValues->type == 'wordpress'){
+
+        if(!is_null($storedOptionScript) && $storedOptionScript->type == 'wordpress'){
             return $bool;
         }
 
         $optionModel = $this->determineOptionValues();
 
-        if(!is_null($storedOptionValues)){
+        if(!is_null($storedOptionScript)){
             if($optionModel->type == OptionScriptModel::TYPE_THEME || $optionModel->type == OptionScriptModel::TYPE_UNKNOWN){
                 //the option allready exists and this one can't supersede the stored one.
                 return $bool;
             }
             if($optionModel->type == OptionScriptModel::TYPE_PLUGIN &&
-                in_array($storedOptionValues->type,[OptionScriptModel::TYPE_PLUGIN, OptionScriptModel::TYPE_WORDPRESS]) ){
+                in_array($storedOptionScript->type,[OptionScriptModel::TYPE_PLUGIN, OptionScriptModel::TYPE_WORDPRESS]) ){
                 return $bool;
             }
             if($optionModel->type == OptionScriptModel::TYPE_WORDPRESS &&
-                $storedOptionValues->type == OptionScriptModel::TYPE_WORDPRESS) {
+                $storedOptionScript->type == OptionScriptModel::TYPE_WORDPRESS) {
                 // types are equal so no need to supersede the stored one.
                 return $bool;
             }
