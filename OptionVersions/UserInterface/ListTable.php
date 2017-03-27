@@ -1,10 +1,12 @@
 <?php
 
 
-namespace WP_Migrations\OptionVersions;
+namespace WP_Migrations\OptionVersions\UserInterface;
 
 
 use WP_List_Table;
+use WP_Migrations\OptionVersions\Repositories\OptionScriptRepository;
+use WP_Migrations\OptionVersions\Repositories\OptionVersionRepository;
 
 class ListTable extends WP_List_Table
 {
@@ -23,8 +25,8 @@ class ListTable extends WP_List_Table
 
     function prepare_items() {
 
-        $pluginOptionsRepository = new \WP_Migrations\PluginOptions\Repository();
-        $optionVersionsRepository = new \WP_Migrations\OptionVersions\Repository();
+        $optionScriptRepository = new OptionScriptRepository();
+        $optionVersionsRepository = new OptionVersionRepository();
 
         $per_page = 20;
         $current_page = $this->get_pagenum();
@@ -40,12 +42,12 @@ class ListTable extends WP_List_Table
         $sortable = $this->get_sortable_columns();
         $this->_column_headers = array($columns, $hidden, $sortable);
 
-        $pluginOptions = $pluginOptionsRepository->getPluginOptions();
+        $options = $optionScriptRepository->getOptions();
 
         $filter = ( ! empty($_REQUEST['group-filter'] ) ) ? $_REQUEST['group-filter'] : false;
         $filter_options = [];
         if($filter) {
-            foreach ($pluginOptions as $option_name => $pluginOption) {
+            foreach ($options as $option_name => $pluginOption) {
                 if ($pluginOption->group == $filter) {
                     $filter_options[] = $option_name;
                 }
@@ -58,10 +60,10 @@ class ListTable extends WP_List_Table
         $optionChanges = $optionVersionsRepository->getOptionChanges($current_limit,$per_page,$order,$filter_options);
 
         foreach($optionChanges as $optionChange){
-            if(array_key_exists($optionChange->option_name,$pluginOptions)){
-                $pluginOption = $pluginOptions[$optionChange->option_name];
+            if(array_key_exists($optionChange->option_name,$options)){
+                $optionScript = $options[$optionChange->option_name];
             } else {
-                $pluginOption = (object)[
+                $optionScript = (object)[
                     'type' => null,
                     'group' => null
                 ];
@@ -69,8 +71,8 @@ class ListTable extends WP_List_Table
 
             $this->items[] = (object) [
                 'id'         => $optionChange->id,
-                'type'       => $pluginOption->type,
-                'group'      => $pluginOption->group,
+                'type'       => $optionScript->type,
+                'group'      => $optionScript->group,
                 'option'     => $optionChange->option_name,
                 'value'      => $optionChange->option_value,
                 'user_id'    => $optionChange->user_id,
@@ -120,14 +122,14 @@ class ListTable extends WP_List_Table
     }
 
     function extra_tablenav( $which ) {
-        $pluginOptionsRepository = new \WP_Migrations\PluginOptions\Repository();
-        $optionVersionsRepository = new \WP_Migrations\OptionVersions\Repository();
+        $optionScriptRepository= new OptionScriptRepository();
+        $optionVersionsRepository = new OptionVersionRepository();
 
         $types = [];
-        foreach($pluginOptionsRepository->getPluginOptions() as $option_name => $pluginOption){
+        foreach($optionScriptRepository->getOptions() as $option_name => $optionScript){
             $count = $optionVersionsRepository->getCount($option_name);
             if($count) {
-                $types[$pluginOption->type][] = $pluginOption->group;
+                $types[$optionScript->type][] = $optionScript->group;
             }
         }
         foreach($types as $type => $groups){

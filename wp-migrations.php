@@ -23,6 +23,8 @@ Text Domain: wp_migrations
 namespace WP_Migrations;
 
 use Composer\Semver\Comparator;
+use WP_Migrations\OptionVersions\Repositories\OptionScriptRepository;
+use WP_Migrations\OptionVersions\Repositories\OptionVersionRepository;
 
 include('vendor/autoload.php');
 
@@ -32,7 +34,7 @@ class Plugin
 
     static function init()
     {
-        if(!class_exists('\WP_Migrations\OptionVersions\Provider')){
+        if(!class_exists('\WP_Migrations\OptionVersions\Tracking\OptionScriptProvider')){
             return;
         }
     
@@ -45,15 +47,20 @@ class Plugin
         add_action('admin_init', array(static::class, 'run_migrations'), 100);
     
     
-        $optionVersionsProvider = new OptionVersions\Provider(
-            new OptionVersions\Repository()
+        $optionScriptTrackingProvider = new OptionVersions\Tracking\OptionScriptProvider(
+            new OptionScriptRepository()
         );
-        $optionVersionsProvider->init();
+        $optionScriptTrackingProvider->init();
 
-        $pluginOptionsProvider = new PluginOptions\Provider(
-            new PluginOptions\Repository()
+        $optionVersionTrackingProvider = new OptionVersions\Tracking\OptionVersionProvider(
+            new OptionVersionRepository()
         );
-        $pluginOptionsProvider->init();
+        $optionVersionTrackingProvider->init();
+
+        $optionVersionsUIProvider = new OptionVersions\UserInterface\Provider(
+            new OptionVersionRepository()
+        );
+        $optionVersionsUIProvider->init();
     }
 
     static function plugin_upgrade()
@@ -63,8 +70,8 @@ class Plugin
         if(Comparator::lessThan($currentVersion,'0.0.1')) {
             // initial installation
             Migrations\Repository::createRepository();
-            OptionVersions\Repository::createRepository();
-            PluginOptions\Repository::createRepository();
+            OptionVersionRepository::createRepository();
+            OptionScriptRepository::createRepository();
         }
 
         add_option('wp-migrations-version', self::VERSION);

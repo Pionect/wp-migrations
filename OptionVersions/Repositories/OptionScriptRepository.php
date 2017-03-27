@@ -1,17 +1,24 @@
 <?php
 
-namespace WP_Migrations\PluginOptions;
+namespace WP_Migrations\OptionVersions\Repositories;
 
 
-class Repository
+class OptionScriptRepository
 {
-    const OPTION_NAME = "wp-migrations-plugin-options";
+    const OPTION_NAME = "wp-migrations-option-scripts";
 
     private $options;
 
     public function __construct()
     {
-        $optionValues  = get_option(self::OPTION_NAME);
+        $optionValues = get_option(self::OPTION_NAME);
+        if (is_array($optionValues)) {
+            foreach ($optionValues as $option_name => $optionScriptData) {
+                $optionScript = new OptionScriptModel();
+                $optionScript->unserialize($optionScriptData);
+                $optionValues[$option_name] = $optionScript;
+            }
+        }
         $this->options = $optionValues ?: [];
     }
 
@@ -28,7 +35,7 @@ class Repository
     /**
      * @return array
      */
-    public function getPluginOptions()
+    public function getOptions()
     {
         return $this->options;
     }
@@ -42,7 +49,7 @@ class Repository
      */
     public function cache($optionName, $object)
     {
-        $options = $this->getPluginOptions();
+        $options = $this->getOptions();
         if (!array_key_exists($optionName, $options)) {
             $this->options[$optionName] = $object;
         }
@@ -50,12 +57,16 @@ class Repository
 
     public function save()
     {
-        update_option(self::OPTION_NAME, $this->options);
+        $options = [];
+        foreach ($this->options as $option_name => $optionScript) {
+            $options[$option_name] = $optionScript->serialize();
+        }
+        update_option(self::OPTION_NAME, $options);
     }
 
     public function get($optionName)
     {
-        $options = $this->getPluginOptions();
+        $options = $this->getOptions();
         if (!array_key_exists($optionName, $options)) {
             return null;
         } else {
