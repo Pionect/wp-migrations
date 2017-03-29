@@ -91,7 +91,7 @@ class OptionScriptProvider
             }
         }
         if($optionModel->script == ""){
-            ddd($files);
+            
         }
 
         if(strpos($optionModel->script,'wp-includes') || strpos($optionModel->script, 'wp-admin')){
@@ -106,7 +106,7 @@ class OptionScriptProvider
             $optionModel->type = OptionScriptModel::TYPE_THEME;
             $optionModel->group = $folders[1];
         } else {
-            ddd($optionModel);
+
             $optionModel->type = OptionScriptModel::TYPE_UNKNOWN;
             $optionModel->group = OptionScriptModel::TYPE_UNKNOWN;
         }
